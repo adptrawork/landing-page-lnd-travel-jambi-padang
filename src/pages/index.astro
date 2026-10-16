@@ -1,81 +1,113 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { business, routes, notes } from '../data/business';
-const cta = `https://wa.me/${business.phone}?text=${encodeURIComponent('Halo, saya mau pesan kursi travel.')}`;
+import { business, routes } from '../data/business';
+const cta = `https://wa.me/${business.phone}?text=${encodeURIComponent('Halo, saya mau pesan kursi Jambi-Padang.')}`;
 ---
 <BaseLayout title={business.title} description={business.description} canonicalPath={business.canonicalPath} image={business.ogImage}>
-  <section class="max-w-7xl mx-auto px-4 w-full">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center min-h-[88dvh] py-10">
-      <div class="md:col-span-7 reveal">
-        <p class="flex items-center gap-2 text-sm font-medium text-emerald-700">
-          <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128 16l36 74 82 12-59 58 14 82-73-38-73 38 14-82-59-58 82-12z"/></svg>
-          <span class="font-mono-num">{business.rating}</span>
-          <span class="text-zinc-500">• {business.category} • {business.city}</span>
-        </p>
-        <h1 class="mt-4 text-4xl md:text-6xl tracking-tighter leading-none font-bold">Jambi–Padang Rp280rb, berangkat 16.00 tiap hari</h1>
-        <p class="mt-5 text-base text-gray-600 leading-relaxed max-w-[65ch]">LND Lintas Nusa Damai di Jl. TP. Sriwijaya Rawasari. Jambi–Padang Rp280rb berangkat 16.00 WIB, booking 24 jam di 0813-8118-2008. Dilengkapi asuransi, AC dingin, dan driver bersertifikat.</p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href={cta} target="_blank" rel="noopener" class="bg-emerald-700 text-white px-7 py-3.5 rounded-full font-medium hover:-translate-y-0.5">Pesan Kursi via WA</a>
-          <a href="/jadwal" class="border border-zinc-300 px-7 py-3.5 rounded-full font-medium hover:border-zinc-950">Lihat Jadwal</a>
+  <!-- HERO DARK: zinc-950, teks terang, kartu border-white/10 -->
+  <section class="bg-zinc-950 text-zinc-100">
+    <div class="max-w-6xl mx-auto px-4 w-full">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center py-12 md:py-16">
+        <div class="md:col-span-7 reveal">
+          <p class="inline-flex items-center gap-2.5 text-xs font-semibold tracking-wide rounded-full border border-white/10 bg-white/5 px-4 py-2">
+            <span class="breathing-dot" aria-hidden="true"></span>
+            <span class="font-mono-num text-red-200">16.00 WIB</span>
+            <span class="text-zinc-400">berangkat tiap hari</span>
+          </p>
+          <h1 class="mt-5 text-4xl md:text-6xl tracking-tight leading-[1.02] font-black">Tidur di Jambi, sarapan di Padang</h1>
+          <p class="mt-5 text-base text-zinc-400 leading-relaxed max-w-[60ch]">LND Lintas Nusa Damai — spesialis jalan malam Jambi–Padang Rp280rb. Asuransi perjalanan, AC dingin, driver bersertifikat, booking 24 jam di {business.phoneDisplay}.</p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href={cta} target="_blank" rel="noopener" class="bg-red-800 text-white px-7 py-3.5 rounded-full font-medium transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Pesan Kursi via WA</a>
+            <a href="/jadwal" class="border border-white/20 text-zinc-100 px-7 py-3.5 rounded-full font-medium transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Linimasa 9 Rute</a>
+          </div>
+          <dl class="mt-8 flex gap-8 border-t border-white/10 pt-5 text-sm max-w-[60ch]">
+            <div><dd class="font-mono-num font-semibold text-lg text-white">{routes.length}</dd><dd class="text-zinc-500">Rute resmi</dd></div>
+            <div><dd class="font-mono-num font-semibold text-lg text-white">24 jam</dd><dd class="text-zinc-500">Booking</dd></div>
+            <div><dd class="font-mono-num font-semibold text-lg text-white">{business.rating}</dd><dd class="text-zinc-500">Rating</dd></div>
+          </dl>
         </div>
-        <div class="mt-8 flex divide-x divide-zinc-200 border-t border-zinc-200 pt-5 text-sm">
-          <div class="pr-6"><p class="font-mono-num font-semibold">{routes.length}</p><p class="text-zinc-500">Rute Aktif</p></div>
-          <div class="px-6"><p class="font-mono-num font-semibold">24 jam</p><p class="text-zinc-500">Booking</p></div>
-          <div class="pl-6"><p class="font-mono-num font-semibold">9</p><p class="text-zinc-500">Rute Terverifikasi</p></div>
+        <div class="md:col-span-5 reveal reveal-d1">
+          <div class="refract rounded-[2rem] border border-white/10 bg-white/5 p-3">
+            <svg viewBox="0 0 300 120" class="w-full h-16" fill="none" aria-hidden="true">
+              <line class="road-dash" x1="0" y1="60" x2="300" y2="60" stroke="#991b1b" stroke-width="3" stroke-dasharray="14 10" stroke-linecap="round" />
+              <circle cx="20" cy="60" r="6" fill="#fca5a5" />
+              <circle cx="280" cy="60" r="6" fill="#fca5a5" />
+            </svg>
+            <img src="/images/lnd-rute-1.jpg" alt="Armada LND Travel rute Jambi Padang berangkat 16.00 WIB" width="693" height="445" loading="eager" fetchpriority="high" class="w-full aspect-[3/2] object-cover rounded-[1.5rem]" />
+            <div class="flex items-center justify-between px-2 py-3 text-xs">
+              <p class="font-mono-num text-zinc-400">JAMBI — 16.00</p>
+              <p class="font-mono-num text-red-200">Rp280rb</p>
+              <p class="font-mono-num text-zinc-400">PADANG — pagi</p>
+            </div>
+          </div>
+          <p class="mt-3 text-xs text-zinc-500">Sumber: traveljambipadang.web.id (situs resmi).</p>
         </div>
-      </div>
-      <div class="md:col-span-5 reveal">
-        <img src="/images/lnd-layanan-1.jpg" alt="Poster LND Travel: layanan travel, paket kilat, dan carter mobil 0813-8118-2008" width="1024" height="1024" loading="eager" fetchpriority="high" class="w-full aspect-square object-cover rounded-[2.5rem] border border-slate-200/50 shadow" />
-        <p class="mt-3 text-xs text-zinc-400">Sumber: traveljambipadang.web.id (situs resmi) — ganti foto asli</p>
       </div>
     </div>
   </section>
 
-  <section class="max-w-7xl mx-auto px-4 py-8 w-full">
-    <p class="text-sm font-medium text-emerald-700">Keunggulan</p>
-    <h2 class="mt-2 text-3xl md:text-4xl tracking-tighter leading-none font-bold max-w-[20ch]">Kenapa berangkat bersama kami?</h2>
-    <div class="mt-8 grid grid-cols-1 md:grid-cols-12 gap-6">
-      <div class="md:col-span-7 reveal"><div class="bg-white border border-slate-200/50 rounded-[2.5rem] p-8 md:p-10 h-full">
-        <p class="font-semibold text-lg tracking-tight">Harga terjangkau terverifikasi</p>
-        <p class="mt-1 text-base text-gray-600">Sembilan rute dengan tarif resmi: Jambi–Padang Rp280rb, Jambi–Pekanbaru Rp250rb.</p>
-      </div></div>
-      <div class="md:col-span-5 reveal"><div class="bg-white border border-slate-200/50 rounded-[2.5rem] p-8 md:p-10 h-full">
-        <p class="font-semibold text-lg tracking-tight">Asuransi perjalanan</p>
-        <p class="mt-1 text-base text-gray-600">Penumpang dijamin asuransi selama perjalanan bersama LND.</p>
-      </div></div>
-      <div class="md:col-span-5 reveal"><div class="bg-white border border-slate-200/50 rounded-[2.5rem] p-8 md:p-10 h-full">
-        <p class="font-semibold text-lg tracking-tight">Armada terawat</p>
-        <p class="mt-1 text-base text-gray-600">Kendaraan aman terawat, interior bersih wangi, AC sehat dan dingin.</p>
-      </div></div>
-      <div class="md:col-span-7 reveal"><div class="bg-white border border-slate-200/50 rounded-[2.5rem] p-8 md:p-10 h-full">
-        <p class="font-semibold text-lg tracking-tight">Driver bersertifikat</p>
-        <p class="mt-1 text-base text-gray-600">Driver ramah berpengalaman dengan sertifikat resmi, plus layanan paket kilat dan carter.</p>
-      </div></div>
+  <!-- STRIP RUTE MALAM -->
+  <section class="max-w-6xl mx-auto px-4 py-10 w-full">
+    <div class="flex items-end justify-between gap-4">
+      <h2 class="text-2xl md:text-3xl tracking-tight font-bold">Rute jalan malam</h2>
+      <a href="/jadwal" class="text-sm font-medium text-red-800 underline underline-offset-4 shrink-0">Linimasa lengkap</a>
     </div>
+    <ol class="mt-5 border-y-2 border-red-800/15 divide-y divide-red-800/10">
+      {routes.slice(0, 5).map((r) => (
+        <li class="reveal flex items-center gap-4 py-3.5">
+          <span class="font-mono-num text-xs font-semibold text-red-800 whitespace-nowrap w-24">{r.desc.replace('Berangkat ', '')}</span>
+          <p class="font-semibold flex-1">{r.name}</p>
+          <p class="font-mono-num text-sm font-semibold text-red-800">{r.price}</p>
+        </li>
+      ))}
+    </ol>
   </section>
 
-  <section class="max-w-7xl mx-auto px-4 py-12 w-full">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-      <div class="md:col-span-5">
-        <p class="text-sm font-medium text-emerald-700">Lokasi & info</p>
-        <h2 class="mt-2 text-3xl md:text-4xl tracking-tighter leading-none font-bold">Rating <span class="font-mono-num">{business.rating}</span> — {business.name}</h2>
-        <p class="mt-3 text-base text-gray-600">{business.address}. <a class="underline underline-offset-4 text-zinc-900" href={business.mapsUrl} target="_blank" rel="noopener">Lihat di Google Maps</a></p>
-        {notes.map((n) => (<p class="mt-3 text-sm text-zinc-500 border-l-2 border-emerald-700 pl-3">{n}</p>))}
-        <a href="/kontak" class="mt-5 inline-block underline underline-offset-4 text-sm font-medium">Kontak & FAQ lengkap</a>
-      </div>
-      <div class="md:col-span-7">
-        <div class="rounded-[2.5rem] overflow-hidden border border-slate-200/50 aspect-video bg-zinc-100">
-          <iframe title={`Peta ${business.name}`} src={business.mapsEmbed} loading="lazy" class="w-full h-full"></iframe>
+  <!-- KEUNGGULAN: 2 baris asimetris 8/4, kartu border -->
+  <section class="max-w-6xl mx-auto px-4 py-8 w-full">
+    <h2 class="text-2xl md:text-3xl tracking-tight font-bold">Kenapa penumpang pilih jalan malam</h2>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-12 gap-5">
+      <div class="md:col-span-8 reveal">
+        <div class="refract bg-zinc-950 text-zinc-100 border border-white/10 rounded-[2rem] p-8 h-full">
+          <p class="font-mono-num text-xs text-red-300">ASURANSI + DRIVER BERSERTIFIKAT</p>
+          <p class="mt-2 font-semibold text-lg tracking-tight">Berangkat sore, tiba dengan aman</p>
+          <p class="mt-1 text-sm text-zinc-400">Penumpang dijamin asuransi, driver ramah berpengalaman bersertifikat resmi.</p>
         </div>
-        <p class="mt-3 text-xs text-zinc-500">{business.address} — {business.hours}</p>
+      </div>
+      <div class="md:col-span-4 reveal">
+        <div class="bg-white border border-red-800/15 rounded-[2rem] p-8 h-full">
+          <p class="font-mono-num text-xs text-red-800 font-semibold">PAKET KILAT</p>
+          <p class="mt-2 font-semibold tracking-tight">Sehari sampai antar kota</p>
+        </div>
+      </div>
+      <div class="md:col-span-4 reveal">
+        <div class="bg-white border border-red-800/15 rounded-[2rem] p-8 h-full">
+          <p class="font-mono-num text-xs text-red-800 font-semibold">ARMADA TERAWAT</p>
+          <p class="mt-2 font-semibold tracking-tight">AC dingin, kabin wangi</p>
+        </div>
+      </div>
+      <div class="md:col-span-8 reveal">
+        <div class="bg-white border border-red-800/15 rounded-[2rem] p-8 h-full md:flex md:items-center md:gap-6">
+          <img src="/images/lnd-layanan-1.jpg" alt="Poster layanan LND: travel, paket kilat, carter mobil" width="1024" height="1024" loading="lazy" class="w-full md:w-40 h-40 object-cover rounded-3xl shrink-0" />
+          <div>
+            <p class="font-mono-num text-xs text-red-800 font-semibold">RENTAL & CARTER</p>
+            <p class="mt-2 font-semibold text-lg tracking-tight">Sewa harian armada terbaru</p>
+            <p class="mt-1 text-sm text-zinc-600">Selain travel antar kota: paket kilat sehari sampai, rental dan carter mobil.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="max-w-7xl mx-auto px-4 py-14 w-full">
-    <div class="md:pl-[12vw]">
-      <h2 class="text-3xl md:text-4xl tracking-tighter leading-none font-bold max-w-[20ch]">Amankan kursi sebelum penuh</h2>
-      <a href={cta} target="_blank" rel="noopener" class="mt-6 inline-block bg-emerald-700 text-white px-8 py-3.5 rounded-full font-medium">Pesan Kursi via WA</a>
+  <section class="max-w-6xl mx-auto px-4 py-14 w-full">
+    <div class="bg-zinc-950 text-zinc-100 border border-white/10 rounded-[2rem] p-8 md:p-12 md:grid md:grid-cols-12 md:gap-8 md:items-center">
+      <div class="md:col-span-8">
+        <p class="inline-flex items-center gap-2 text-xs font-semibold"><span class="breathing-dot" aria-hidden="true"></span> Kursi malam ini tersisa</p>
+        <h2 class="mt-2 text-2xl md:text-3xl tracking-tight font-bold">Amankan kursi 16.00 sebelum penuh</h2>
+      </div>
+      <div class="md:col-span-4 mt-6 md:mt-0 md:text-right">
+        <a href={cta} target="_blank" rel="noopener" class="inline-block bg-red-800 text-white px-8 py-3.5 rounded-full font-semibold transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Pesan Kursi via WA</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

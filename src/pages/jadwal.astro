@@ -1,44 +1,44 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { business, routes } from '../data/business';
-const badgeCls = (s: string) =>
-  s.includes('Terverifikasi') ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
 ---
-<BaseLayout title={`Jadwal & tarif — ${business.name}`} description={`Jadwal keberangkatan dan tarif ${business.name}: rute, jam, dan harga tiket terverifikasi situs resmi.`} canonicalPath="/jadwal" image={business.ogImage}>
-  <section class="max-w-7xl mx-auto px-4 pt-12 w-full">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
-      <div class="md:col-span-7 reveal">
-        <p class="text-sm font-medium text-emerald-700">Jadwal & Tarif</p>
-        <h1 class="mt-2 text-4xl md:text-5xl tracking-tighter leading-none font-bold">Rute, jam, dan harga tiket</h1>
-        <p class="mt-4 text-base text-gray-600 max-w-[65ch]">Label hijau berarti tarif terverifikasi dari situs resmi (<a class="underline underline-offset-4 text-zinc-900" href="https://traveljambipadang.web.id" target="_blank" rel="noopener">situs resmi</a>). Selalu konfirmasi kursi via WA sebelum transfer.</p>
-      </div>
-      <div class="md:col-span-5 reveal">
-        <img src="/images/lnd-layanan-1.jpg" alt="Poster LND Travel: layanan travel, paket kilat, dan carter mobil 0813-8118-2008" width="1024" height="1024" loading="lazy" class="w-full h-56 object-cover rounded-[2.5rem] border border-slate-200/50" />
-        <p class="mt-3 text-xs text-zinc-400">Sumber: traveljambipadang.web.id (situs resmi) — ganti foto asli</p>
-      </div>
-    </div>
+<BaseLayout title={`Linimasa rute & jam 16.00 — ${business.name}`} description="Linimasa 9 rute LND Travel: Jambi–Padang Rp280rb 16.00 WIB, Jambi–Pekanbaru Rp250rb, Padang–Palembang Rp480rb. Tarif terverifikasi situs resmi." canonicalPath="/jadwal" image="/images/lnd-rute-1.jpg" breadcrumbs={[{ name: 'Rute & Tarif', path: '/jadwal' }]}>
+  <section class="max-w-6xl mx-auto px-4 pt-12 w-full">
+    <p class="text-xs font-semibold uppercase tracking-widest text-red-800">Rute & Tarif — 9 rute resmi</p>
+    <h1 class="mt-2 text-4xl md:text-6xl tracking-tight leading-none font-black max-w-[22ch]">Satu linimasa, sembilan tujuan</h1>
+    <p class="mt-4 text-base text-zinc-600 max-w-[65ch]">Garis merah di sisi kiri terisi saat halaman digulir (murni CSS). Klik stop untuk menandai rute — tanpa JavaScript. Tarif terverifikasi dari <a class="underline underline-offset-4 text-red-800" href="https://traveljambipadang.web.id" target="_blank" rel="noopener">situs resmi</a>.</p>
   </section>
-  <section class="max-w-7xl mx-auto px-4 py-10 w-full">
-    <div class="reveal bg-white border border-slate-200/50 rounded-[2.5rem] p-4 md:p-8 overflow-x-auto">
-      <table class="w-full text-sm min-w-[640px]">
-        <thead><tr class="text-left text-zinc-500 border-b border-zinc-200">
-          <th class="py-3 px-4 font-medium">Rute</th><th class="py-3 px-4 font-medium">Harga</th>
-          <th class="py-3 px-4 font-medium">Status</th><th class="py-3 px-4 font-medium">Keterangan</th>
-        </tr></thead>
-        <tbody class="divide-y divide-zinc-100">
-          {routes.map((r) => (
-            <tr class="hover:bg-zinc-50/70">
-              <td class="py-4 px-4 font-semibold">{r.name}</td>
-              <td class="py-4 px-4 font-mono-num font-semibold whitespace-nowrap">{r.price}</td>
-              <td class="py-4 px-4"><span class={`text-xs font-medium px-3 py-1.5 rounded-full ${badgeCls(r.status)}`}>{r.status}</span></td>
-              <td class="py-4 px-4 text-gray-600">{r.desc}</td>
-            </tr>
+  <section class="max-w-6xl mx-auto px-4 py-10 w-full">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div class="md:col-span-8 relative pl-10 md:pl-14">
+        <div class="absolute left-3 md:left-5 top-2 bottom-2 w-1 rounded-full bg-red-800/10 overflow-hidden" aria-hidden="true">
+          <div class="timeline-progress w-full h-full bg-red-800 rounded-full"></div>
+        </div>
+        <ol class="space-y-5">
+          {routes.map((r, i) => (
+            <li id={`stop-${i + 1}`} class="timeline-stop relative reveal">
+              <span class="absolute -left-10 md:-left-14 top-6 grid place-items-center w-7 h-7 rounded-full bg-white border-2 border-red-800 font-mono-num text-[11px] font-semibold text-red-800" style={`left: calc(-2.5rem)`} aria-hidden="true">{i + 1}</span>
+              <a href={`#stop-${i + 1}`} class="stop-card block bg-white border border-red-800/15 rounded-[1.5rem] p-6 hover:border-red-800/40">
+                <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <h2 class="font-bold tracking-tight text-lg">{r.name}</h2>
+                  <p class="font-mono-num font-semibold text-red-800">{r.price}</p>
+                </div>
+                <p class="mt-1 font-mono-num text-xs text-zinc-500">{r.desc} — {r.status}</p>
+                <p class="mt-2 text-sm text-zinc-600">{r.name.includes('Padang') && r.name.includes('Jambi') ? 'Rute unggulan jalan malam — tiba pagi hari.' : 'Rute reguler LND dengan armada terawat dan asuransi.'}</p>
+              </a>
+            </li>
           ))}
-        </tbody>
-      </table>
-    </div>
-    <div class="mt-10 md:pl-[12vw]">
-      <a href="/pesan" class="inline-block bg-emerald-700 text-white px-8 py-3.5 rounded-full font-medium">Pesan kursi sekarang</a>
+        </ol>
+      </div>
+      <aside class="md:col-span-4">
+        <div class="md:sticky md:top-24 bg-zinc-950 text-zinc-100 border border-white/10 rounded-[1.5rem] p-7">
+          <p class="inline-flex items-center gap-2 text-xs font-semibold"><span class="breathing-dot" aria-hidden="true"></span> JAM KEBERANGKATAN</p>
+          <p class="mt-2 font-mono-num text-3xl font-semibold">16.00 <span class="text-sm text-zinc-400">WIB</span></p>
+          <p class="mt-2 text-sm text-zinc-400">Jambi–Padang tiap hari. Jambi–Pekanbaru 10.00 / 14.00 / 20.00 WIB.</p>
+          <img src="/images/lnd-rute-1.jpg" alt="Armada LND Travel rute Jambi Padang" width="693" height="445" loading="lazy" class="mt-4 w-full h-40 object-cover rounded-2xl" />
+          <a href="/pesan" class="mt-5 block text-center bg-red-800 text-white px-6 py-3 rounded-full text-sm font-semibold transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Pesan kursi sekarang</a>
+        </div>
+      </aside>
     </div>
   </section>
 </BaseLayout>

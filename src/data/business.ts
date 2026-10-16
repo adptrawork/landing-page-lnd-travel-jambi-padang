@@ -16,8 +16,8 @@ export const business = {
   schemaType: 'TravelAgency',
   ctaLabel: 'Pesan Kursi via WA',
   ctaUrl: 'https://wa.me/6281381182008',
-  title: 'LND Travel Jambi–Padang Rp280rb — Booking 24 Jam',
-  description: 'LND Lintas Nusa Damai Jambi–Padang Rp280rb berangkat 16.00, booking 24 jam 0813-8118-2008. Asuransi, AC dingin, driver bersertifikat.',
+  title: 'Jambi–Padang Berangkat 16.00 Tiap Hari | LND Lintas Nusa Damai',
+  description: 'LND Travel spesialis jalan malam Jambi–Padang Rp280rb berangkat 16.00 WIB tiap hari. Asuransi, AC dingin, driver bersertifikat, booking 24 jam 0813-8118-2008.',
   canonicalPath: '/',
   ogImage: '/images/lnd-layanan-1.jpg',
 };

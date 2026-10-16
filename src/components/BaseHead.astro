@@ -1,7 +1,15 @@
 ---
 import { business } from '../data/business';
-interface Props { title: string; description: string; canonicalUrl: string; image?: string; schemaType?: string; }
-const { title, description, canonicalUrl, image = '/default-og.jpg', schemaType = 'LocalBusiness' } = Astro.props;
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl: string;
+  image?: string;
+  schemaType?: string;
+  breadcrumbs?: { name: string; path: string }[];
+  faqJsonLd?: { q: string; a: string }[];
+}
+const { title, description, canonicalUrl, image = '/images/lnd-layanan-1.jpg', schemaType = 'TravelAgency', breadcrumbs = [], faqJsonLd = [] } = Astro.props;
 const ogImage = new URL(image, Astro.site ?? Astro.url).toString();
 const jsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
@@ -10,11 +18,33 @@ const jsonLd: Record<string, unknown> = {
   url: canonicalUrl,
   image: ogImage,
   description: description,
+  telephone: business.phoneDisplay,
+  priceRange: 'Rp200.000–Rp700.000',
   address: { '@type': 'PostalAddress', streetAddress: business.address, addressLocality: business.city, addressCountry: 'ID' },
-  openingHours: business.hours,
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: '00:00',
+    closes: '23:59',
+  },
+  departureTime: '16:00',
+  areaServed: ['Jambi', 'Padang', 'Pekanbaru', 'Pariaman', 'Muaro Bungo', 'Palembang', 'Lampung'],
   aggregateRating: { '@type': 'AggregateRating', ratingValue: String(business.rating), reviewCount: String(business.reviewCount) },
 };
-if (business.phone) jsonLd.telephone = business.phoneDisplay;
+const crumbJsonLd = breadcrumbs.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Beranda', item: new URL('/', Astro.site ?? Astro.url).toString() }, ...breadcrumbs.map((b, i) => ({ '@type': 'ListItem', position: i + 2, name: b.name, item: new URL(b.path, Astro.site ?? Astro.url).toString() }))],
+    }
+  : null;
+const faqSchema = faqJsonLd.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqJsonLd.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    }
+  : null;
 ---
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -26,6 +56,8 @@ if (business.phone) jsonLd.telephone = business.phoneDisplay;
 <meta name="description" content={description} />
 <meta name="robots" content="index, follow" />
 <meta property="og:type" content="website" />
+<meta property="og:locale" content="id_ID" />
+<meta property="og:site_name" content="LND Travel — Spesialis Jalan Malam Jambi-Padang" />
 <meta property="og:url" content={canonicalUrl} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
@@ -36,3 +68,5 @@ if (business.phone) jsonLd.telephone = business.phoneDisplay;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={ogImage} />
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+{crumbJsonLd && <script type="application/ld+json" set:html={JSON.stringify(crumbJsonLd)} />}
+{faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
