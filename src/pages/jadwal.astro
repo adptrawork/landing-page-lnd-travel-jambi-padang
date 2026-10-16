@@ -1,44 +1,61 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { business, routes } from '../data/business';
+const routesJson = JSON.stringify(routes);
 ---
-<BaseLayout title={`Linimasa rute & jam 16.00 — ${business.name}`} description="Linimasa 9 rute LND Travel: Jambi–Padang Rp280rb 16.00 WIB, Jambi–Pekanbaru Rp250rb, Padang–Palembang Rp480rb. Tarif terverifikasi situs resmi." canonicalPath="/jadwal" image="/images/lnd-rute-1.jpg" breadcrumbs={[{ name: 'Rute & Tarif', path: '/jadwal' }]}>
-  <section class="max-w-6xl mx-auto px-4 pt-12 w-full">
+<!-- Ref: Shakuro Umrah&Hajj tour — tabel rute + filter; mobile = cards -->
+<BaseLayout title={`Rute, jam & tarif jalan malam — ${business.name}`} description="Jadwal 9 rute LND Travel: Jambi–Padang Rp280rb 16.00 WIB, Jambi–Pekanbaru Rp250rb, Padang–Palembang Rp480rb. Tarif terverifikasi situs resmi." canonicalPath="/jadwal" image="/images/lnd-rute-1.jpg" breadcrumbs={[{ name: 'Rute & Tarif', path: '/jadwal' }]}>
+  <section class="max-w-7xl mx-auto px-4 pt-12 md:pt-20 w-full">
     <p class="text-xs font-semibold uppercase tracking-widest text-red-800">Rute & Tarif — 9 rute resmi</p>
-    <h1 class="mt-2 text-4xl md:text-6xl tracking-tight leading-none font-black max-w-[22ch]">Satu linimasa, sembilan tujuan</h1>
-    <p class="mt-4 text-base text-zinc-600 max-w-[65ch]">Garis merah di sisi kiri terisi saat halaman digulir (murni CSS). Klik stop untuk menandai rute — tanpa JavaScript. Tarif terverifikasi dari <a class="underline underline-offset-4 text-red-800" href="https://traveljambipadang.web.id" target="_blank" rel="noopener">situs resmi</a>.</p>
-  </section>
-  <section class="max-w-6xl mx-auto px-4 py-10 w-full">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-      <div class="md:col-span-8 relative pl-10 md:pl-14">
-        <div class="absolute left-3 md:left-5 top-2 bottom-2 w-1 rounded-full bg-red-800/10 overflow-hidden" aria-hidden="true">
-          <div class="timeline-progress w-full h-full bg-red-800 rounded-full"></div>
-        </div>
-        <ol class="space-y-5">
-          {routes.map((r, i) => (
-            <li id={`stop-${i + 1}`} class="timeline-stop relative reveal">
-              <span class="absolute -left-10 md:-left-14 top-6 grid place-items-center w-7 h-7 rounded-full bg-white border-2 border-red-800 font-mono-num text-[11px] font-semibold text-red-800" style={`left: calc(-2.5rem)`} aria-hidden="true">{i + 1}</span>
-              <a href={`#stop-${i + 1}`} class="stop-card block bg-white border border-red-800/15 rounded-[1.5rem] p-6 hover:border-red-800/40">
-                <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <h2 class="font-bold tracking-tight text-lg">{r.name}</h2>
-                  <p class="font-mono-num font-semibold text-red-800">{r.price}</p>
-                </div>
-                <p class="mt-1 font-mono-num text-xs text-zinc-500">{r.desc} — {r.status}</p>
-                <p class="mt-2 text-sm text-zinc-600">{r.name.includes('Padang') && r.name.includes('Jambi') ? 'Rute unggulan jalan malam — tiba pagi hari.' : 'Rute reguler LND dengan armada terawat dan asuransi.'}</p>
-              </a>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <aside class="md:col-span-4">
-        <div class="md:sticky md:top-24 bg-zinc-950 text-zinc-100 border border-white/10 rounded-[1.5rem] p-7">
-          <p class="inline-flex items-center gap-2 text-xs font-semibold"><span class="breathing-dot" aria-hidden="true"></span> JAM KEBERANGKATAN</p>
-          <p class="mt-2 font-mono-num text-3xl font-semibold">16.00 <span class="text-sm text-zinc-400">WIB</span></p>
-          <p class="mt-2 text-sm text-zinc-400">Jambi–Padang tiap hari. Jambi–Pekanbaru 10.00 / 14.00 / 20.00 WIB.</p>
-          <img src="/images/lnd-rute-1.jpg" alt="Armada LND Travel rute Jambi Padang" width="693" height="445" loading="lazy" class="mt-4 w-full h-40 object-cover rounded-2xl" />
-          <a href="/pesan" class="mt-5 block text-center bg-red-800 text-white px-6 py-3 rounded-full text-sm font-semibold transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Pesan kursi sekarang</a>
-        </div>
-      </aside>
+    <h1 class="mt-2 text-4xl md:text-6xl tracking-tight leading-none font-black max-w-[22ch]">Satu tabel, sembilan tujuan</h1>
+    <p class="mt-4 text-base text-zinc-600 max-w-[65ch]">Tarif terverifikasi dari <a class="underline underline-offset-4 text-red-800" href="https://traveljambipadang.web.id" target="_blank" rel="noopener">situs resmi</a>. Jambi–Padang berangkat 16.00 WIB tiap hari.</p>
+    <div class="mt-6 max-w-md">
+      <label for="route-filter" class="text-sm font-medium">Filter rute</label>
+      <input id="route-filter" type="search" placeholder="cth: Padang, Pekanbaru…" autocomplete="off" class="field mt-1.5 w-full border border-zinc-300 rounded-2xl px-4 py-3 text-sm focus:border-red-800 focus:outline-none" />
     </div>
   </section>
+  <section class="max-w-7xl mx-auto px-4 py-10 md:py-12 w-full">
+    <div id="jadwal-skeleton" class="grid grid-cols-1 gap-4" aria-hidden="true">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+    <p id="jadwal-empty" class="hidden text-sm text-zinc-500 bg-white border border-red-800/15 rounded-[1.5rem] p-6">Tidak ada rute yang cocok — coba kata kunci lain atau <a class="underline text-red-800" href="/pesan">tanya via WA</a>.</p>
+    <div id="jadwal-table-wrap" class="hidden">
+      <p class="md:hidden text-xs text-zinc-500 mb-2">← Geser tabel ke samping — kolom rute menempel</p>
+      <div class="hidden md:block bg-white border border-red-800/15 rounded-[2rem] overflow-hidden">
+        <div class="scroll-hint overflow-x-auto max-h-[70dvh] overflow-y-auto">
+          <table class="w-full text-sm min-w-[720px]">
+            <thead class="sticky top-0 z-10 bg-zinc-950 text-zinc-100">
+              <tr class="text-left">
+                <th scope="col" class="sticky-col bg-zinc-950 py-3.5 px-5 font-semibold">Rute</th><th scope="col" class="py-3.5 px-5 font-semibold">Jam</th>
+                <th scope="col" class="py-3.5 px-5 font-semibold">Harga</th><th scope="col" class="py-3.5 px-5 font-semibold">Status</th><th scope="col" class="py-3.5 px-5 font-semibold"><span class="sr-only">Aksi</span></th>
+              </tr>
+            </thead>
+            <tbody id="jadwal-tbody" class="divide-y divide-red-800/10"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="jadwal-cards" class="mt-4 grid grid-cols-1 gap-4 md:hidden"></div>
+    </div>
+    <div class="mt-10">
+      <a href="/pesan" class="inline-flex items-center bg-red-800 text-white px-8 py-3.5 rounded-full font-semibold min-h-[48px] transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Pesan kursi sekarang</a>
+    </div>
+  </section>
+  <script id="jadwal-data" type="application/json" set:html={routesJson} />
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const routes = JSON.parse(document.getElementById('jadwal-data')?.textContent || '[]');
+      const badge = (s) => s.includes('Terverifikasi') ? 'bg-red-800 text-white' : 'bg-amber-100 text-amber-800';
+      const wa = (n) => `https://wa.me/6281381182008?text=${encodeURIComponent('Halo LND Travel, saya mau pesan kursi ' + n + '. Apakah tersedia untuk 16.00?')}`;
+      const tbody = document.getElementById('jadwal-tbody');
+      const cards = document.getElementById('jadwal-cards');
+      const render = (q) => {
+        const list = routes.filter((r) => r.name.toLowerCase().includes(q.toLowerCase()));
+        if (tbody) tbody.innerHTML = list.map((r, i) => `<tr class="${i % 2 ? 'bg-stone-100/80' : ''}"><td class="sticky-col ${i % 2 ? '!bg-stone-100 bg-white' : 'bg-white'} py-4 px-5 font-semibold">${r.name}</td><td class="py-4 px-5 font-mono-num text-sm whitespace-nowrap">${r.desc}</td><td class="py-4 px-5 font-mono-num font-semibold whitespace-nowrap text-red-800">${r.price}</td><td class="py-4 px-5"><span class="text-xs font-medium px-3 py-1.5 rounded-full whitespace-nowrap ${badge(r.status)}">${r.status}</span></td><td class="py-4 px-5 text-right"><a href="${wa(r.name)}" target="_blank" rel="noopener" class="inline-block bg-red-800 text-white px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap">Pesan</a></td></tr>`).join('');
+        if (cards) cards.innerHTML = list.map((r, i) => `<article class="bg-white border border-red-800/15 rounded-[1.5rem] p-6"><div class="flex items-center justify-between gap-3"><span class="font-mono-num text-xs font-semibold text-red-800">RUTE 0${i + 1}</span><span class="text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap ${badge(r.status)}">${r.status}</span></div><h2 class="mt-2 font-bold text-lg">${r.name}</h2><p class="mt-1 font-mono-num text-sm text-zinc-500">${r.desc}</p><p class="mt-1 font-mono-num font-semibold text-red-800">${r.price}</p><a href="${wa(r.name)}" target="_blank" rel="noopener" class="mt-4 grid place-items-center bg-red-800 text-white px-6 py-3 rounded-full text-sm font-semibold min-h-[48px]">Pesan kursi 16.00</a></article>`).join('');
+        document.getElementById('jadwal-empty')?.classList.toggle('hidden', list.length > 0);
+      };
+      setTimeout(() => { document.getElementById('jadwal-skeleton')?.remove(); document.getElementById('jadwal-table-wrap')?.classList.remove('hidden'); render(''); }, 450);
+      document.getElementById('route-filter')?.addEventListener('input', (e) => render(e.target.value ?? ''));
+    });
+  </script>
 </BaseLayout>

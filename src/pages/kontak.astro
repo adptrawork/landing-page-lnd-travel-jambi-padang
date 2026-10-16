@@ -1,41 +1,43 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Faq from '../components/Faq.astro';
+import MapFacade from '../components/MapFacade.astro';
 import { business, faqs, notes } from '../data/business';
+const extraFaqs = [
+  { q: 'Berapa bagasi yang boleh dibawa?', a: 'Ketentuan bagasi tidak dipublikasikan di situs resmi — tanyakan batas koper via WA, terutama jika membawa paket kilat sekalian.' },
+  { q: 'Bagaimana refund jika batal berangkat?', a: 'Ketentuan refund tidak dipublikasikan — minta kebijakan pembatalan tertulis via WA sebelum membayar.' },
+  { q: 'Di mana titik jemput di Jambi?', a: 'Loket Jl. TP. Sriwijaya, Rawasari, Kota Baru. Konfirmasi titik jemput dan datang 30 menit sebelum 16.00.' },
+  { q: 'Apakah berangkat jika penumpang sedikit?', a: 'Keberangkatan 16.00 tiap hari mengikuti kuota kursi — konfirmasi H-1 via WA karena booking dilayani 24 jam.' },
+];
 ---
+<!-- Ref: Haramain agency — kontak loket + jam + Maps facade + FAQ -->
 <BaseLayout title={`Kontak Rawasari & FAQ jalan malam — ${business.name}`} description="Kontak LND Travel Jl. TP Sriwijaya Rawasari Jambi: booking 24 jam 0813-8118-2008. FAQ jam 16.00, asuransi, pilih kursi, paket kilat." canonicalPath="/kontak" image={business.ogImage} breadcrumbs={[{ name: 'Kontak', path: '/kontak' }]}>
-  <section class="max-w-6xl mx-auto px-4 pt-12 w-full">
+  <section class="max-w-7xl mx-auto px-4 pt-12 md:pt-20 w-full">
     <p class="text-xs font-semibold uppercase tracking-widest text-red-800">Kontak — booking 24 jam</p>
     <h1 class="mt-2 text-4xl md:text-6xl tracking-tight leading-none font-black max-w-[22ch]">Chat sekarang, berangkat 16.00</h1>
   </section>
-  <section class="max-w-6xl mx-auto px-4 py-10 w-full">
+  <section class="max-w-7xl mx-auto px-4 py-10 md:py-12 w-full">
     <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
       <div class="md:col-span-4 reveal">
         <div class="bg-zinc-950 text-zinc-100 border border-white/10 rounded-[2rem] p-8 h-full">
           <p class="inline-flex items-center gap-2 text-xs font-semibold"><span class="breathing-dot" aria-hidden="true"></span> LOKET RAWASARI</p>
           <p class="mt-3 text-sm text-zinc-400">{business.address}</p>
-          <p class="mt-4 font-mono-num font-semibold text-lg text-white">{business.phoneDisplay}</p>
-          <p class="mt-1 text-xs text-zinc-500">{business.hours}</p>
+          <p class="mt-4 text-sm"><span class="text-zinc-500">Jam:</span> <span class="text-zinc-100">{business.hours}</span></p>
+          <p class="mt-4 font-mono-num font-semibold text-lg text-white"><a href="tel:+6281381182008" class="underline underline-offset-4">{business.phoneDisplay}</a></p>
           <div class="mt-6 flex flex-col gap-3">
-            <a href={business.ctaUrl} target="_blank" rel="noopener" class="bg-red-800 text-white text-center px-6 py-3 rounded-full text-sm font-semibold transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">{business.ctaLabel}</a>
-            <a href={business.mapsUrl} target="_blank" rel="noopener" class="border border-white/20 text-center px-6 py-3 rounded-full text-sm font-medium transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Buka Maps</a>
+            <a href={business.ctaUrl} target="_blank" rel="noopener" class="bg-red-800 text-white text-center px-6 py-3 rounded-full text-sm font-semibold min-h-[48px] grid place-items-center transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">{business.ctaLabel}</a>
+            <a href={business.mapsUrl} target="_blank" rel="noopener" class="border border-white/20 text-center px-6 py-3 rounded-full text-sm font-medium min-h-[48px] grid place-items-center transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Buka Maps</a>
           </div>
           {notes.map((n) => (<p class="mt-4 text-xs text-zinc-500 border-l-2 border-red-800 pl-3">{n}</p>))}
         </div>
       </div>
       <div class="md:col-span-8 reveal reveal-d1">
-        <div class="bg-white border border-red-800/15 rounded-[2rem] p-8">
-          <h2 class="font-bold text-lg tracking-tight">Pertanyaan malam hari — murni accordion</h2>
-          <div class="mt-4 divide-y divide-red-800/10">
-            {faqs.map((f) => (
-              <details class="faq py-4 group">
-                <summary class="font-medium cursor-pointer flex justify-between items-center gap-4">{f.q}<span class="text-red-800 group-open:rotate-45 transition text-xl leading-none" aria-hidden="true">+</span></summary>
-                <div class="faq-body"><div class="overflow-hidden"><p class="pt-2 text-sm text-zinc-600 leading-relaxed">{f.a}</p></div></div>
-              </details>
-            ))}
-          </div>
+        <div class="bg-white border border-red-800/15 rounded-[2rem] px-6 md:px-8 py-4">
+          <h2 class="font-bold text-lg tracking-tight pt-4">Pertanyaan malam hari</h2>
+          <Faq items={[...faqs, ...extraFaqs]} />
         </div>
-        <div class="mt-5 rounded-[2rem] overflow-hidden border border-red-800/15 bg-zinc-100 h-[320px]">
-          <iframe title={`Peta ${business.name}`} src={business.mapsEmbed} loading="lazy" class="w-full h-full"></iframe>
+        <div class="mt-5">
+          <MapFacade src={business.mapsEmbed} title={`Peta ${business.name}`} address={business.address} mapsUrl={business.mapsUrl} />
         </div>
       </div>
     </div>

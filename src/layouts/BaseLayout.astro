@@ -18,10 +18,10 @@ const faqJsonLd = showFaq ? faqs : [];
 </head>
 <body class="bg-[#fafaf9] text-zinc-900 antialiased">
   <div class="bg-zinc-950 text-zinc-200 text-xs border-b border-white/10">
-    <p class="max-w-6xl mx-auto px-4 py-2 flex items-center gap-2 tracking-wide"><span class="breathing-dot" aria-hidden="true"></span> Berangkat 16.00 WIB tiap hari — booking 24 jam {business.phoneDisplay}</p>
+    <p class="max-w-7xl mx-auto px-4 py-2 flex items-center gap-2 tracking-wide"><span class="breathing-dot" aria-hidden="true"></span> Berangkat 16.00 WIB tiap hari — booking 24 jam {business.phoneDisplay}</p>
   </div>
   <header class="sticky top-0 z-40 bg-[#fafaf9]/85 backdrop-blur-xl border-b border-red-800/15">
-    <nav class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+    <nav class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3" aria-label="Navigasi utama">
       <a href="/" class="flex items-center gap-2.5">
         <span class="grid place-items-center w-9 h-9 rounded-xl bg-red-800 text-white font-black text-sm">LN</span>
         <span class="font-bold tracking-tight text-sm leading-tight">LND Travel<br /><span class="font-normal text-zinc-500 text-xs">Jambi–Padang Spesialis</span></span>
@@ -31,19 +31,26 @@ const faqJsonLd = showFaq ? faqs : [];
           <a href={n.href} class:list={['transition hover:text-red-800 hover:-translate-y-px', active(n.href) && 'text-red-800 font-semibold underline underline-offset-8 decoration-red-800 decoration-2']}>{n.label}</a>
         ))}
       </div>
-      <a href={business.ctaUrl} target="_blank" rel="noopener" class="bg-red-800 text-white px-5 py-2.5 rounded-full text-sm font-medium transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]" style="transition-timing-function:cubic-bezier(0.16,1,0.3,1)">{business.ctaLabel}</a>
-    </nav>
-    <nav class="md:hidden border-t border-zinc-200/60">
-      <div class="max-w-6xl mx-auto flex gap-5 overflow-x-auto px-4 py-2.5 text-sm text-zinc-600">
-        {navLinks.map((n) => (
-          <a href={n.href} class:list={['whitespace-nowrap transition hover:text-red-800', active(n.href) && 'text-red-800 font-semibold']}>{n.label}</a>
-        ))}
+      <div class="flex items-center gap-2">
+        <a href={business.ctaUrl} target="_blank" rel="noopener" class="hidden sm:inline-block bg-red-800 text-white px-5 py-2.5 rounded-full text-sm font-medium transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]" style="transition-timing-function:cubic-bezier(0.16,1,0.3,1)">{business.ctaLabel}</a>
+        <button id="menu-btn" type="button" class="md:hidden grid place-items-center w-12 h-12 rounded-full border border-red-800/20 text-red-800" aria-expanded="false" aria-controls="mobile-menu" aria-label="Buka menu navigasi">
+          <svg id="menu-ic-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          <svg id="menu-ic-close" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
       </div>
     </nav>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-red-800/10 bg-[#fafaf9]">
+      <nav class="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-1 text-base" aria-label="Navigasi seluler">
+        {navLinks.map((n) => (
+          <a href={n.href} class:list={['min-h-[48px] flex items-center px-3 rounded-2xl transition hover:bg-red-800/5', active(n.href) && 'text-red-800 font-semibold bg-red-800/5']}>{n.label}</a>
+        ))}
+        <a href={business.ctaUrl} target="_blank" rel="noopener" class="mt-2 text-center bg-red-800 text-white px-6 py-3 rounded-full text-sm font-semibold min-h-[48px] grid place-items-center">{business.ctaLabel}</a>
+      </nav>
+    </div>
   </header>
   <main><slot /></main>
   <footer class="mt-20 bg-zinc-950 text-zinc-300 border-t border-white/10">
-    <div class="max-w-6xl mx-auto px-4 py-12 grid gap-8 md:grid-cols-12">
+    <div class="max-w-7xl mx-auto px-4 py-12 grid gap-8 md:grid-cols-12">
       <div class="md:col-span-7">
         <p class="font-bold tracking-tight text-lg text-white">LND Lintas Nusa Damai <span class="font-normal text-red-300 text-sm">— jalan malam Jambi–Padang</span></p>
         <p class="mt-2 text-sm leading-relaxed max-w-[65ch] text-zinc-400">{business.address}</p>
@@ -64,5 +71,20 @@ const faqJsonLd = showFaq ? faqs : [];
       </div>
     </div>
   </footer>
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.getElementById('menu-btn');
+      const menu = document.getElementById('mobile-menu');
+      const icOpen = document.getElementById('menu-ic-open');
+      const icClose = document.getElementById('menu-ic-close');
+      btn?.addEventListener('click', () => {
+        const open = menu?.classList.toggle('hidden') === false;
+        btn.setAttribute('aria-expanded', String(open));
+        btn.setAttribute('aria-label', open ? 'Tutup menu navigasi' : 'Buka menu navigasi');
+        icOpen?.classList.toggle('hidden', open);
+        icClose?.classList.toggle('hidden', !open);
+      });
+    });
+  </script>
 </body>
 </html>

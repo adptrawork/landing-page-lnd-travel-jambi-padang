@@ -1,0 +1,19 @@
+---
+/* imgSrc opsional: unit tanpa foto resmi tampil sebagai kartu teks (jujur, tanpa placeholder) */
+interface Props { name: string; desc: string; imgSrc?: string; w?: number; h?: number; alt?: string; index?: number }
+const { name, desc, imgSrc, w = 800, h = 600, alt = '', index = 0 } = Astro.props;
+---
+<!-- Ref: Awwwards Fulidhoo Tours travel UI — minimal layout, foto + seat info -->
+<figure class="bg-white border border-red-800/15 rounded-[1.75rem] overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-red-800/40 hover:shadow-lg hover:shadow-red-800/10">
+  {imgSrc && <img src={imgSrc} alt={alt || `${name} — LND Travel`} width={w} height={h} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" fetchpriority={index === 0 ? 'high' : 'auto'} class="w-full h-60 object-cover" />}
+  <figcaption class="p-6">
+    <p class="font-mono-num text-xs text-red-800 font-semibold">UNIT 0{index + 1}</p>
+    <p class="mt-1 font-bold text-lg tracking-tight">{name}</p>
+    <p class="mt-1 text-sm text-zinc-600">{desc}</p>
+    <ul class="mt-3 flex flex-wrap gap-2 text-xs font-medium text-red-800">
+      <li class="bg-red-800/5 border border-red-800/15 rounded-full px-3 py-1">AC dingin</li>
+      <li class="bg-red-800/5 border border-red-800/15 rounded-full px-3 py-1">Asuransi</li>
+      <li class="bg-red-800/5 border border-red-800/15 rounded-full px-3 py-1">Driver bersertifikat</li>
+    </ul>
+  </figcaption>
+</figure>

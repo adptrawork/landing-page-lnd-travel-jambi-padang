@@ -1,0 +1,17 @@
+---
+const badges = [
+  { t: '16.00 tiap hari', d: 'Jambi–Padang jalan malam' },
+  { t: 'Asuransi', d: 'Penumpang terjamin' },
+  { t: 'Booking 24 jam', d: 'Senin–Minggu' },
+  { t: 'Rating 4.6/5', d: '140 ulasan penumpang' },
+];
+---
+<!-- Ref: Shakuro Umrah&Hajj tour — trust badges row -->
+<ul class="grid grid-cols-2 lg:grid-cols-4 gap-4 list-none">
+  {badges.map((b) => (
+    <li class="bg-white border border-red-800/15 rounded-[1.5rem] p-5 text-center">
+      <p class="font-bold tracking-tight text-sm">{b.t}</p>
+      <p class="mt-1 text-xs text-zinc-500">{b.d}</p>
+    </li>
+  ))}
+</ul>
