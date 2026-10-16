@@ -119,3 +119,30 @@ details.faq[open] .faq-body { grid-template-rows: 1fr; opacity: 1; }
 /* Scroll-x hint untuk tabel jadwal */
 .scroll-hint { scrollbar-width: thin; }
 .sticky-col { position: sticky; left: 0; z-index: 5; }
+
+/* Awwwards-inspired diagonal stripe overlay on hero */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Diagonal stripes: 45deg, 2px stripe, 8px gap */
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.05) 0,
+    rgba(255,255,255,0.05) 2px,
+    transparent 2px,
+    transparent 8px
+  );
+  /* Optional: animate the stripes for subtle movement */
+  animation: stripeMove 10s linear infinite;
+  z-index: 0; /* Behind content but above background */
+}
+@keyframes stripeMove {
+  to {
+    background-position: 200% 0; /* Move the gradient */
+  }
+}
