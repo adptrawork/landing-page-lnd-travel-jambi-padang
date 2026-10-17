@@ -7,6 +7,10 @@
 :root {
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
   --road: #991b1b;
+  --paper: #f4efe7; /* kertas tiket — hangat, bukan putih murni */
+  --ink: #1c1917;
+  --ink-70: rgba(28, 25, 23, 0.7);
+  --ink-rule: rgba(28, 25, 23, 0.14);
 }
 
 html { scroll-behavior: smooth; }
@@ -40,12 +44,6 @@ body {
   50% { opacity: 0.15; transform: scale(2.4); }
 }
 
-/* Night-road dash drift on hero card border */
-.road-dash { animation: dashmove 1.6s linear infinite; }
-@keyframes dashmove {
-  to { stroke-dashoffset: -24; }
-}
-
 /* Vertical timeline scroll-progress path — CSS scroll-driven, no JS listener */
 .timeline-progress {
   transform-origin: top;
@@ -70,7 +68,7 @@ body {
 /* Refraction sheen sweep — transform/opacity only */
 .refract { position: relative; overflow: hidden; }
 .refract::before {
-  content: ''; position: absolute; top: 0; bottom: 0; width: 45%;
+  content: ''; position: absolute; top: 0; bottom: 0; width: 45%; z-index: 1;
   background: linear-gradient(100deg, transparent, rgba(255,255,255,0.09), transparent);
   transform: translateX(-140%) skewX(-12deg); opacity: 0;
 }
@@ -88,14 +86,6 @@ details.faq .faq-body {
   transition: grid-template-rows 0.45s var(--ease-premium), opacity 0.45s var(--ease-premium);
 }
 details.faq[open] .faq-body { grid-template-rows: 1fr; opacity: 1; }
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal { animation: none; }
-  .breathing-dot::after, .road-dash { animation: none; }
-  .timeline-progress { animation: none; transform: scaleY(1); }
-  .skeleton { animation: none; }
-  html { scroll-behavior: auto; }
-}
 
 /* Skeleton shimmer untuk tabel jadwal / kartu rute */
 .skeleton {
@@ -120,29 +110,238 @@ details.faq[open] .faq-body { grid-template-rows: 1fr; opacity: 1; }
 .scroll-hint { scrollbar-width: thin; }
 .sticky-col { position: sticky; left: 0; z-index: 5; }
 
-/* Awwwards-inspired diagonal stripe overlay on hero */
+/* ============================================================
+   HERO — "Ticket stub / boarding pass" (Ref: sistem tiket cetak
+   boarding-pass & stub perjalanan — hairline rules, offset block,
+   perforasi dashed, barcode CSS. Tanpa kartu, tanpa bayangan tebal)
+   ============================================================ */
 .hero-section {
   position: relative;
   overflow: hidden;
 }
-.hero-section::before {
-  content: '';
+
+/* Latar: cahaya keberangkatan malam + kolom garis rambut kertas tiket */
+.hero-glow {
   position: absolute;
   inset: 0;
-  /* Diagonal stripes: 45deg, 2px stripe, 8px gap */
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(255,255,255,0.05) 0,
-    rgba(255,255,255,0.05) 2px,
-    transparent 2px,
-    transparent 8px
-  );
-  /* Optional: animate the stripes for subtle movement */
-  animation: stripeMove 10s linear infinite;
-  z-index: 0; /* Behind content but above background */
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(72% 62% at 6% -8%, rgba(153, 27, 27, 0.38), transparent 66%),
+    radial-gradient(52% 52% at 98% 6%, rgba(127, 29, 29, 0.24), transparent 72%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 88px);
 }
-@keyframes stripeMove {
-  to {
-    background-position: 200% 0; /* Move the gradient */
-  }
+
+/* Garis sobek (perforasi) di kaki hero */
+.hero-tear {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  z-index: 1;
+  background-image: repeating-linear-gradient(90deg, rgba(252, 165, 165, 0.32) 0 12px, transparent 12px 26px);
+}
+
+/* --- Panel tiket --- */
+.ticket-wrap { position: relative; display: block; }
+.ticket-offset {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  transform: translate(14px, 14px);
+}
+.ticket {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--ink-rule);
+  box-shadow: 0 28px 64px -34px rgba(9, 9, 11, 0.8);
+}
+.ticket-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-70);
+}
+/* Label mono untuk sisi gelap (kontras aman di zinc-950) */
+.mono-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a1a1aa;
+}
+.mono-label.mono-accent { color: rgba(252, 165, 165, 0.92); }
+.mono-label.mono-cta { color: #e4e4e7; }
+.mono-label.mono-cta:hover { color: #fafaf9; }
+.ticket-soft { font-size: 12px; line-height: 1.65; color: var(--ink-70); }
+.ticket-tag {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 6px 12px;
+  background: var(--road);
+  color: #fafaf9;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.ticket-photo { position: relative; overflow: hidden; border-bottom: 1px solid var(--ink-rule); }
+.ticket-photo img { display: block; width: 100%; height: auto; }
+.ticket-rule { height: 1px; background: var(--ink-rule); }
+
+/* Garis panah rute (hairline + ujung panah) */
+.ticket-arrow {
+  flex: 1 1 auto;
+  height: 1px;
+  margin: 10px 12px 7px;
+  background: var(--ink-rule);
+  position: relative;
+  min-width: 24px;
+}
+.ticket-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--road);
+  border-right: 1px solid var(--road);
+  transform: rotate(45deg);
+}
+
+/* Grid data tiket — hairline, bukan kartu */
+.ticket-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.ticket-grid > div { padding: 14px 18px; border-top: 1px solid var(--ink-rule); }
+.ticket-grid > div:nth-child(odd) { border-right: 1px solid var(--ink-rule); }
+.ticket-grid dd { margin: 5px 0 0; font-size: 14px; font-weight: 600; line-height: 1.35; }
+.ticket-grid dd.ticket-value { font-family: 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.02em; }
+
+/* Perforasi: dashed divider + setengah lingkaran sobek di kedua sisi */
+.ticket-perf { position: relative; height: 0; border-top: 2px dashed rgba(28, 25, 23, 0.28); }
+.ticket-perf::before,
+.ticket-perf::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: #09090b; /* warna latar hero — ilustrasi lubang sobek */
+}
+.ticket-perf::before { left: -12px; }
+.ticket-perf::after { right: -12px; }
+
+/* Stub yang bisa "disobek" saat hover */
+.ticket-stub { transition: transform 0.45s var(--ease-premium); }
+.ticket-wrap:hover .ticket-stub { transform: translateY(5px); }
+
+/* Barcode strip — gradient berulang, tanpa aset tambahan */
+.ticket-barcode {
+  position: relative;
+  overflow: hidden;
+  height: 46px;
+  margin-top: 12px;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(28, 25, 23, 0.92) 0 2px, transparent 2px 6px),
+    repeating-linear-gradient(90deg, rgba(28, 25, 23, 0.78) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(90deg, rgba(28, 25, 23, 0.88) 0 4px, transparent 4px 19px);
+}
+.ticket-barcode::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(153, 27, 27, 0.42), transparent);
+  transform: translateX(-140%);
+  animation: barcode-scan 8s ease-in-out infinite;
+}
+@keyframes barcode-scan {
+  0%, 12% { transform: translateX(-140%); opacity: 0; }
+  30% { opacity: 1; }
+  55%, 100% { transform: translateX(320%); opacity: 0; }
+}
+
+/* Masuknya tiket: geser + miring seperti dicetak lalu diletakkan */
+.ticket-in { animation: ticket-in 0.85s var(--ease-premium) both; animation-delay: 0.1s; }
+@keyframes ticket-in {
+  from { opacity: 0; transform: translateY(28px) rotate(1.4deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+@media (min-width: 768px) {
+  .ticket-in { animation-name: ticket-in-tilt; }
+}
+@keyframes ticket-in-tilt {
+  from { opacity: 0; transform: translateY(30px) rotate(2.4deg); }
+  to { opacity: 1; transform: translateY(0) rotate(-0.9deg); }
+}
+
+/* CTA utama: blok cetak dengan offset, bukan pil */
+.btn-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 1.75rem;
+  background: var(--road);
+  color: #fafaf9;
+  font-weight: 600;
+  box-shadow: 6px 6px 0 rgba(252, 165, 165, 0.32);
+  transition: transform 0.35s var(--ease-premium), box-shadow 0.35s var(--ease-premium);
+}
+.btn-stamp:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 rgba(252, 165, 165, 0.45); }
+.btn-stamp:active { transform: translate(0, 0); box-shadow: 3px 3px 0 rgba(252, 165, 165, 0.3); }
+
+/* Rail statistik — hairline, bukan tiga kartu sama besar */
+.stat-rail { border-top: 1px solid rgba(255, 255, 255, 0.12); }
+.stat-rail > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+}
+.stat-rail > div + div { border-top: 1px solid rgba(255, 255, 255, 0.08); }
+.stat-rail dd { margin: 0; }
+@media (min-width: 1024px) {
+  .stat-rail { display: flex; }
+  .stat-rail > div { display: block; flex: 1 1 33%; padding: 18px 22px; }
+  .stat-rail > div:first-child { padding-left: 0; }
+  .stat-rail > div + div { border-top: 0; border-left: 1px solid rgba(255, 255, 255, 0.12); }
+  .stat-rail dd { margin-top: 6px; }
+}
+
+/* ============================================================
+   prefers-reduced-motion — harus di AKHIR file agar menimpa
+   semua aturan animasi/transisi di atasnya
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal,
+  .breathing-dot::after,
+  .ticket-in,
+  .ticket-barcode::after,
+  .timeline-progress,
+  .skeleton,
+  .skeleton::after,
+  .refract:hover::before { animation: none; }
+
+  .ticket-barcode::after { opacity: 0; }
+  .timeline-progress { transform: scaleY(1); opacity: 1; }
+  .stop-card { transition: none; }
+  details.faq .faq-body { transition: none; }
+  .ticket-stub,
+  .btn-stamp { transition: none; }
+  .ticket-wrap:hover .ticket-stub,
+  .btn-stamp:hover,
+  .btn-stamp:active { transform: none; }
 }

@@ -8,6 +8,7 @@ import Faq from '../components/Faq.astro';
 import { business, routes, faqs } from '../data/business';
 const cta = `https://wa.me/${business.phone}?text=${encodeURIComponent('Halo, saya mau pesan kursi Jambi-Padang.')}`;
 const waFor = (name: string) => `https://wa.me/${business.phone}?text=${encodeURIComponent(`Halo LND Travel, saya mau pesan kursi ${name}. Apakah tersedia untuk 16.00?`)}`;
+const lead = routes[0];
 const extraFaqs = [
   { q: 'Berapa bagasi yang boleh dibawa?', a: 'Ketentuan bagasi tidak dipublikasikan di situs resmi — tanyakan batas koper via WA, terutama jika membawa paket kilat sekalian.' },
   { q: 'Bagaimana refund jika batal berangkat?', a: 'Ketentuan refund tidak dipublikasikan — minta kebijakan pembatalan tertulis via WA sebelum membayar.' },
@@ -16,46 +17,89 @@ const extraFaqs = [
 ];
 ---
 <BaseLayout title={business.title} description={business.description} canonicalPath={business.canonicalPath} image={business.ogImage}>
-  <!-- Ref: Dribbble FlowLab Hajj&Umrah booking — 01 Hero rute unggulan + jam + CTA Pesan Kursi -->
-  <section class="bg-zinc-950 text-zinc-100 hero-section">
-    <div class="max-w-7xl mx-auto px-4 w-full">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center py-12 md:py-20">
-        <div class="md:col-span-7 reveal">
-          <p class="inline-flex items-center gap-2.5 text-xs font-semibold tracking-wide rounded-full border border-white/10 bg-white/5 px-4 py-2">
+  <!-- Ref: Awwwards boarding-pass & ticket-stub print systems — hero tiket jalan malam: headline editorial kiri + panel tiket kanan (perforasi dashed, barcode gradient, label mono) -->
+  <section class="hero-section bg-zinc-950 text-zinc-100">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 w-full">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-y-14 md:gap-x-10 items-start pt-12 pb-16 md:pt-20 md:pb-24">
+        <div class="md:col-span-6 lg:col-span-7 reveal">
+          <p class="inline-flex items-center gap-2.5 border border-white/10 bg-white/5 px-3 py-2 text-[11px] font-mono-num uppercase tracking-[0.2em] text-zinc-300">
             <span class="breathing-dot" aria-hidden="true"></span>
-            <span class="font-mono-num text-red-200">16.00 WIB</span>
-            <span class="text-zinc-400">berangkat tiap hari</span>
+            Boarding 16.00 WIB · tiap hari
           </p>
-          <h1 class="mt-5 text-4xl md:text-6xl tracking-tight leading-[1.02] font-black">Tidur di Jambi, sarapan di Padang</h1>
-          <p class="mt-5 text-base text-zinc-400 leading-relaxed max-w-[60ch]">LND Lintas Nusa Damai — spesialis jalan malam Jambi–Padang Rp280rb. Asuransi perjalanan, AC dingin, driver bersertifikat, booking 24 jam di {business.phoneDisplay}.</p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href={cta} target="_blank" rel="noopener" class="bg-red-800 text-white px-7 py-3.5 rounded-full font-medium min-h-[48px] inline-flex items-center transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Pesan Kursi via WA</a>
-            <a href="/jadwal" class="border border-white/20 text-zinc-100 px-7 py-3.5 rounded-full font-medium min-h-[48px] inline-flex items-center transition duration-300 hover:-translate-y-0.5 active:scale-[0.97]">Linimasa 9 Rute</a>
+          <p class="mt-7 mono-label mono-accent">Night service · Jambi → Padang</p>
+          <h1 class="mt-4 text-[clamp(2.05rem,8.6vw,4.25rem)] font-black leading-[0.95] tracking-[-0.03em]">
+            <span class="block">Tidur di Jambi,</span>
+            <span class="block text-red-300">sarapan di Padang</span>
+          </h1>
+          <div class="mt-7 h-px w-24 bg-red-300/40" aria-hidden="true"></div>
+          <p class="mt-6 max-w-[52ch] text-base leading-relaxed text-zinc-400">LND Lintas Nusa Damai — spesialis jalan malam Jambi–Padang, tarif {lead.price}. Asuransi perjalanan, AC dingin, driver bersertifikat, booking 24 jam di {business.phoneDisplay}.</p>
+          <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <a href={cta} target="_blank" rel="noopener" class="btn-stamp">Pesan Kursi via WA</a>
+            <a href="/jadwal" class="mono-label mono-cta underline decoration-red-300/60 decoration-2 underline-offset-[7px] inline-flex min-h-[48px] items-center">Linimasa 9 rute →</a>
           </div>
-          <dl class="mt-8 flex gap-8 border-t border-white/10 pt-5 text-sm max-w-[60ch]">
-            <div><dd class="font-mono-num font-semibold text-lg text-white">{routes.length}</dd><dd class="text-zinc-500">Rute resmi</dd></div>
-            <div><dd class="font-mono-num font-semibold text-lg text-white">24 jam</dd><dd class="text-zinc-500">Booking</dd></div>
-            <div><dd class="font-mono-num font-semibold text-lg text-white">{business.rating}</dd><dd class="text-zinc-500">Rating</dd></div>
+          <dl class="stat-rail mt-10">
+            <div>
+              <dt class="mono-label">Rute resmi</dt>
+              <dd class="font-mono-num text-2xl font-semibold text-white">{routes.length} jalur</dd>
+            </div>
+            <div>
+              <dt class="mono-label">Booking</dt>
+              <dd class="font-mono-num text-2xl font-semibold text-white">24 jam</dd>
+            </div>
+            <div>
+              <dt class="mono-label">Rating</dt>
+              <dd class="font-mono-num text-2xl font-semibold text-white">{business.rating}<span class="text-sm font-normal text-zinc-400"> / {business.reviewCount}</span></dd>
+            </div>
           </dl>
         </div>
-        <div class="md:col-span-5 reveal reveal-d1">
-          <div class="refract rounded-[2rem] border border-white/10 bg-white/5 p-3">
-            <svg viewBox="0 0 300 120" class="w-full max-w-full h-16" fill="none" aria-hidden="true">
-              <line class="road-dash" x1="0" y1="60" x2="300" y2="60" stroke="#991b1b" stroke-width="3" stroke-dasharray="14 10" stroke-linecap="round" />
-              <circle cx="20" cy="60" r="6" fill="#fca5a5" />
-              <circle cx="280" cy="60" r="6" fill="#fca5a5" />
-            </svg>
-            <img src="/images/lnd-rute-1.jpg" alt="Armada LND Travel rute Jambi Padang berangkat 16.00 WIB" width="693" height="445" loading="eager" fetchpriority="high" decoding="async" class="w-full max-w-full aspect-[3/2] object-cover rounded-[1.5rem]" />
-            <div class="flex items-center justify-between px-2 py-3 text-xs">
-              <p class="font-mono-num text-zinc-400">JAMBI — 16.00</p>
-              <p class="font-mono-num text-red-200">Rp280rb</p>
-              <p class="font-mono-num text-zinc-400">PADANG — pagi</p>
-            </div>
+        <div class="md:col-span-6 lg:col-span-5">
+          <div class="ticket-wrap ticket-in">
+            <div class="ticket-offset" aria-hidden="true"></div>
+            <figure class="ticket">
+              <div class="ticket-photo refract">
+                <img src="/images/lnd-rute-1.webp" alt="Armada LND Travel rute Jambi Padang berangkat 16.00 WIB" width="693" height="445" loading="eager" fetchpriority="high" decoding="async" />
+                <figcaption class="ticket-tag">Rute unggulan · 016</figcaption>
+              </div>
+              <div class="flex items-center justify-between gap-3 px-5 pt-4">
+                <p class="ticket-mono">Boarding pass</p>
+                <p class="ticket-mono">Jalan malam</p>
+              </div>
+              <div class="flex items-end px-5 pb-4 pt-3">
+                <div>
+                  <p class="ticket-mono">JMB</p>
+                  <p class="mt-1.5 text-2xl font-black leading-none">Jambi</p>
+                </div>
+                <span class="ticket-arrow" aria-hidden="true"></span>
+                <div class="text-right">
+                  <p class="ticket-mono">PDG</p>
+                  <p class="mt-1.5 text-2xl font-black leading-none">Padang</p>
+                </div>
+              </div>
+              <div class="ticket-rule mx-5" aria-hidden="true"></div>
+              <dl class="ticket-grid">
+                <div><dt class="ticket-mono">Jadwal</dt><dd class="ticket-value">{lead.desc}</dd></div>
+                <div><dt class="ticket-mono">Tarif / kursi</dt><dd class="ticket-value">{lead.price}</dd></div>
+                <div><dt class="ticket-mono">Jam layanan</dt><dd>{business.hours}</dd></div>
+                <div><dt class="ticket-mono">Status</dt><dd>{lead.status}</dd></div>
+              </dl>
+              <div class="ticket-perf" aria-hidden="true"></div>
+              <div class="ticket-stub px-5 pb-5 pt-6">
+                <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <p class="ticket-mono">Kode pesan · WA {business.phoneDisplay}</p>
+                  <p class="ticket-mono">Gate · Rawasari</p>
+                </div>
+                <div class="ticket-barcode" aria-hidden="true"></div>
+                <p class="ticket-mono mt-2">LND 016 · JMB → PDG · 1600</p>
+                <p class="ticket-soft mt-4">{business.address}</p>
+              </div>
+            </figure>
           </div>
-          <p class="mt-3 text-xs text-zinc-500">Sumber: traveljambipadang.web.id (situs resmi).</p>
+          <p class="mt-4 text-xs text-zinc-500">Sumber: traveljambipadang.web.id (situs resmi).</p>
         </div>
       </div>
     </div>
+    <div class="hero-tear" aria-hidden="true"></div>
   </section>
 
   <!-- Ref: Shakuro Umrah&Hajj tour — 02 Rute populer: tabel desktop / cards mobile -->
